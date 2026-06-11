@@ -1,0 +1,138 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f8f3cf;
+  box-shadow: 0 8px 24px var(--sombra);
+  border: 2px solid var(--borde-papel);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th {
+  background: var(--verde-oscuro);
+  color: var(--papel-amarillo);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+th,
+td {
+  padding: 12px;
+  border: 1px solid #9f985d;
+  text-align: center;
+}
+
+td {
+  color: var(--texto);
+  font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--papel-verde);
+}
+
+tbody tr:hover {
+  background: var(--papel-celeste);
+}
+
+td button {
+  margin: 3px;
+  background: var(--papel-amarillo);
+  color: #111;
+  border: none;
+  font-weight: 900;
+  border-radius: 7px;
+}
+
+td button:hover {
+  background: var(--papel-verde);
+}
+
+td button:last-child {
+  background: var(--rojo-serie);
+  color: white;
+}
+
+td button:last-child:hover {
+  background: #6f1c16;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: #000a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  padding: 20px;
+}
+
+.modalCard {
+  background: linear-gradient(145deg, var(--papel-verde), var(--papel-amarillo));
+  padding: 25px;
+  border-radius: 14px;
+  width: 470px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 2px solid var(--borde-papel);
+  box-shadow: 0 12px 34px #0008;
+}
+
+.modalCard h2 {
+  color: var(--verde-oscuro);
+  margin-top: 0;
+  border-bottom: 2px solid var(--verde-oscuro);
+  padding-bottom: 8px;
+}
+
+.modalCard p {
+  font-weight: 600;
+}
+
+.modalCard b {
+  color: var(--verde-oscuro);
+}
+
+.modalCard img {
+  width: 100%;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: 2px solid var(--borde-papel);
+}
+
+.modalCard button {
+  width: 100%;
+  margin-top: 15px;
+  background: var(--verde-medio);
+  color: white;
+  border: none;
+  font-weight: 900;
+}
+
+.modalCard button:hover {
+  background: var(--verde-oscuro);
+}
+
+.filtrosTabla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.filtrosTabla input,
+.filtrosTabla select,
+.filtrosTabla button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--borde-papel);
+  font-weight: 700;
+}
+
+.btnCancelar {
+  margin-top: 10px;
+  width: 100%;
+  background: #6b6b6b;
+  color: white;
+}

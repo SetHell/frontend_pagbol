@@ -1,0 +1,110 @@
+.appLayout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--fondo-profundo);
+}
+
+.menu {
+  width: 245px;
+  background:
+    linear-gradient(180deg, #6ead50, #478f79);
+  color: white;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 5px 0 24px #0008;
+  border-right: 2px solid #4b4e32;
+}
+
+.menuCabecera h2 {
+  text-align: center;
+  margin: 0;
+  color: var(--papel-amarillo);
+  font-weight: 900;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--papel-amarillo);
+  padding-bottom: 12px;
+}
+
+.menuOpciones {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu button {
+  border: none;
+  padding: 13px;
+  border-radius: 9px;
+  background: var(--papel-amarillo);
+  color: #17170f;
+  cursor: pointer;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.menu button:hover {
+  background: var(--papel-verde);
+}
+
+.menu button.activo {
+  background: var(--papel-celeste);
+  border: 2px solid #00ac81;
+  color: #102d25;
+}
+
+.menuSesion {
+  margin-top: auto;
+}
+
+.menu .salir {
+  width: 100%;
+  background: var(--rojo-serie);
+  color: white;
+}
+
+.menu .salir:hover {
+  background: #6f1c16;
+}
+
+.contenido {
+  flex: 1;
+  padding: 30px;
+  background:
+    radial-gradient(circle at top right, #708025, transparent 28%),
+    linear-gradient(135deg, #2a681e, #303420);
+}
+
+.panel {
+  max-width: 1120px;
+  margin: auto;
+  background: rgba(12, 15, 10, 0.28);
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.panel h1 {
+  color: var(--papel-amarillo);
+  font-weight: 900;
+  margin-top: 0;
+  border-left: 8px solid var(--papel-celeste);
+  padding-left: 12px;
+}
+
+.cardDato {
+  background: linear-gradient(145deg, var(--papel-verde), var(--papel-amarillo));
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 8px 24px var(--sombra);
+  border: 2px solid var(--borde-papel);
+}
+
+.cardDato p {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.salirMovil {
+  display: none;
+}

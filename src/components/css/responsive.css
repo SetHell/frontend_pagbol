@@ -1,0 +1,55 @@
+@media (max-width: 768px) {
+  .appLayout {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .menu {
+    width: 100%;
+    min-height: auto;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .menuCabecera h2 {
+    font-size: 22px;
+  }
+
+  .menuOpciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .menuSesion {
+    display: none;
+  }
+
+  .contenido {
+    flex: 1;
+    padding: 16px;
+    min-height: auto;
+  }
+
+  .salirMovil {
+    display: block;
+    padding: 16px;
+    background: #11190f;
+    border-top: 2px solid var(--papel-amarillo);
+  }
+
+  .salirMovil button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 9px;
+    background: var(--rojo-serie);
+    color: white;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .salirMovil button:hover {
+    background: #6f1c16;
+  }
+}
