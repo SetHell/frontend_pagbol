@@ -6,16 +6,20 @@ import type {
   Vehiculo,
 } from "../components/types";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const isLocal = import.meta.env.DEV;
+
+const BASE_URL = isLocal
+  ? "http://localhost:3000"
+  : import.meta.env.VITE_API_URL;
+
+const API_URL = `${BASE_URL}/api`;
 
 const obtenerToken = () => sessionStorage.getItem("token");
 
 const authHeaders = (): Record<string, string> => {
   const token = obtenerToken();
 
-  if (!token) {
-    return {};
-  }
+  if (!token) return {};
 
   return {
     Authorization: `Bearer ${token}`,
@@ -30,24 +34,14 @@ const jsonHeaders = (): Record<string, string> => ({
 const obtenerMensajeError = async (res: Response) => {
   const texto = await res.text();
 
-  if (!texto) {
-    return "Error de conexión con el servidor";
-  }
+  if (!texto) return "Error de conexión con el servidor";
 
   try {
     const json = JSON.parse(texto);
 
-    if (Array.isArray(json.message)) {
-      return json.message.join(", ");
-    }
-
-    if (typeof json.message === "string") {
-      return json.message;
-    }
-
-    if (typeof json.error === "string") {
-      return json.error;
-    }
+    if (Array.isArray(json.message)) return json.message.join(", ");
+    if (typeof json.message === "string") return json.message;
+    if (typeof json.error === "string") return json.error;
 
     return texto;
   } catch {
@@ -80,10 +74,7 @@ export const loginAgente = (nro_esclf: string, password: string) => {
   return peticion<LoginResponse>("/auth/login", {
     method: "POST",
     headers: jsonHeaders(),
-    body: JSON.stringify({
-      nro_esclf,
-      password,
-    }),
+    body: JSON.stringify({ nro_esclf, password }),
   });
 };
 
@@ -97,10 +88,6 @@ export const buscarVehiculo = (placa: string) => {
 
 export const listarBoletas = () => {
   return peticion<BoletaReg[]>("/boletas");
-};
-
-export const listarBoletasAgente = () => {
-  return listarBoletas();
 };
 
 export const crearBoleta = (data: Partial<BoletaReg>) => {
@@ -150,6 +137,7 @@ export const procesarOCR = async (file: File): Promise<DatosOcr> => {
   }
 
   const data = (await res.json()) as RespuestaOcrBackend;
+
   const datos = data.resultado?.datos_sugeridos || data.datos_sugeridos;
 
   if (!datos) {
