@@ -6,7 +6,7 @@ import {
   type SetStateAction,
 } from "react";
 import type { Agente, BoletaReg } from "./types";
-import { eliminarBoleta, listarBoletasAgente } from "../services/api";
+import { eliminarBoleta, listarBoletas } from "../services/api";
 import type {
   FiltrosHistorial,
   OrdenCampo,
@@ -49,7 +49,7 @@ export const Historial = ({ agente, bol, setBol, editarBoleta }: Props) => {
 
     const cargarBoletas = async () => {
       try {
-        const data = await listarBoletasAgente();
+        const data = await listarBoletas();
 
         if (!cancelado) {
           setBol(data);
