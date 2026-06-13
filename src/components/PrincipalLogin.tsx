@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Turnstile } from "react-turnstile";
 import type { Agente } from "./types";
 import { loginAgente } from "../services/api";
+import { RegistroAgente } from "./RegistroAgente";
 import "./css/login.css";
 
 type Props = {
@@ -12,6 +14,8 @@ export const PrincipalLogin = ({ onLogin }: Props) => {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [mostrarRegistro, setMostrarRegistro] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const ingresar = async () => {
     setErr("");
@@ -26,10 +30,20 @@ export const PrincipalLogin = ({ onLogin }: Props) => {
       return;
     }
 
+    if (!captchaToken) {
+      setErr("Debe completar el CAPTCHA.");
+      return;
+    }
+
     setCargando(true);
 
     try {
-      const data = await loginAgente(nroEsclf.trim().toUpperCase(), password);
+      const data = await loginAgente(
+        nroEsclf.trim().toUpperCase(),
+        password,
+        captchaToken
+      );
+
       onLogin(data.agente, data.token);
     } catch (error) {
       const mensaje =
@@ -43,10 +57,15 @@ export const PrincipalLogin = ({ onLogin }: Props) => {
     }
   };
 
+  if (mostrarRegistro) {
+    return <RegistroAgente volver={() => setMostrarRegistro(false)} />;
+  }
+
   return (
     <main className="loginPage">
       <section className="loginCard">
         <h1>Sistema de Boletas</h1>
+
         <p>Ingrese sus credenciales de funcionario policial.</p>
 
         <label>Nro. Escalafón</label>
@@ -71,10 +90,22 @@ export const PrincipalLogin = ({ onLogin }: Props) => {
           }}
         />
 
+        <div style={{ marginTop: "15px" }}>
+          <Turnstile
+            sitekey="0x4AAAAAADiiKmol3OT7EeRm"
+            onVerify={(token) => setCaptchaToken(token)}
+            onExpire={() => setCaptchaToken("")}
+          />
+        </div>
+
         {err && <div className="loginError">{err}</div>}
 
         <button onClick={ingresar} disabled={cargando}>
           {cargando ? "Verificando..." : "Ingresar"}
+        </button>
+
+        <button type="button" onClick={() => setMostrarRegistro(true)}>
+          Registrar nuevo agente
         </button>
       </section>
     </main>

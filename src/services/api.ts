@@ -66,11 +66,39 @@ const peticion = async <T>(
   return res.json();
 };
 
-export const loginAgente = (nro_esclf: string, password: string) => {
+export const loginAgente = (
+  nro_esclf: string,
+  password: string,
+  captchaToken: string
+) => {
   return peticion<LoginResponse>("/auth/login", {
     method: "POST",
     headers: jsonHeaders(),
-    body: JSON.stringify({ nro_esclf, password }),
+    body: JSON.stringify({
+      nro_esclf,
+      password,
+      captchaToken,
+    }),
+  });
+};
+
+export const registrarAgente = (
+  nro_esclf: string,
+  CI: string,
+  grado: string,
+  password: string,
+  captchaToken: string
+) => {
+  return peticion("/auth/register", {
+    method: "POST",
+    headers: jsonHeaders(),
+    body: JSON.stringify({
+      nro_esclf,
+      CI,
+      grado,
+      password,
+      captchaToken,
+    }),
   });
 };
 
