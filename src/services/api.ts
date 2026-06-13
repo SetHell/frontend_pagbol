@@ -6,13 +6,9 @@ import type {
   Vehiculo,
 } from "../components/types";
 
-const isLocal = import.meta.env.DEV;
-
-const BASE_URL = isLocal
-  ? "http://localhost:3000"
-  : import.meta.env.VITE_API_URL;
-
-const API_URL = `${BASE_URL}/api`;
+const API_URL = import.meta.env.DEV
+  ? "http://localhost:3000/api"
+  : "https://backend-pagbol.onrender.com/api";
 
 const obtenerToken = () => sessionStorage.getItem("token");
 
