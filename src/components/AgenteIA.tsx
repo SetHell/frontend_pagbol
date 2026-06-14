@@ -180,9 +180,19 @@ ${historial}`;
   };
 
   return (
-    <div ref={burbRef} style={posicionEsquina(esquina)}>
-      {abierto && (
-        <div className="agenteChat">
+  <div ref={burbRef} style={posicionEsquina(esquina)}>
+    {abierto && (
+      <div style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9998,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+        pointerEvents: "none",
+      }}>
+        <div className="agenteChat" style={{ pointerEvents: "all" }}>
           <div className="agenteChatHead">
             <span>Asistente PagBol</span>
             <button onClick={() => setAbierto(false)}>✕</button>
@@ -222,18 +232,20 @@ ${historial}`;
             </button>
           </div>
         </div>
-      )}
-
-      <div
-        className="agenteBurbuja"
-        onMouseDown={iniciarArrastre}
-        onTouchStart={iniciarArrastre}
-        onClick={() => {
-          if (!fueArrastrado.current) setAbierto((p) => !p);
-        }}
-      >
-        <img src={agenteImg} alt="Asistente" />
       </div>
+    )}
+
+    <div
+      className="agenteBurbuja"
+      style={{ position: "relative", zIndex: 9999 }}
+      onMouseDown={iniciarArrastre}
+      onTouchStart={iniciarArrastre}
+      onClick={() => {
+        if (!fueArrastrado.current) setAbierto((p) => !p);
+      }}
+    >
+        <img src={agenteImg} alt="Asistente" />
+        </div>
     </div>
-  );
+    );
 };

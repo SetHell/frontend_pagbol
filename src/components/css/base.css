@@ -234,3 +234,15 @@ button:hover {
   font-size: 16px;
   cursor: pointer;
 }
+
+.agenteChat {
+  width: min(360px, 92vw);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(145deg, var(--papel-verde), var(--papel-amarillo));
+  border: 2px solid var(--borde-papel);
+  border-radius: 16px;
+  box-shadow: 0 8px 40px #0009;
+  overflow: hidden;
+}
