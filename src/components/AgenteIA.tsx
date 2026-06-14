@@ -17,102 +17,18 @@ type Props = {
 const HF_TOKEN = import.meta.env.VITE_HF_TOKEN as string;
 const MODELO = "mistralai/Mistral-7B-Instruct-v0.3";
 
-type Esquina = "top-right" | "top-left" | "bottom-right" | "bottom-left";
-
-const posicionEsquina = (esquina: Esquina): React.CSSProperties => {
-  const base: React.CSSProperties = { position: "fixed", zIndex: 9999 };
-  if (esquina === "top-right") return { ...base, top: 18, right: 18 };
-  if (esquina === "top-left") return { ...base, top: 18, left: 18 };
-  if (esquina === "bottom-right") return { ...base, bottom: 18, right: 18 };
-  return { ...base, bottom: 18, left: 18 };
-};
-
-const esquinaMasCercana = (x: number, y: number): Esquina => {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  const derecha = x > w / 2;
-  const abajo = y > h / 2;
-  if (!derecha && !abajo) return "top-left";
-  if (derecha && !abajo) return "top-right";
-  if (!derecha && abajo) return "bottom-left";
-  return "bottom-right";
-};
-
 export const AgenteIA = ({ paginaActual, nombreAgente, grado }: Props) => {
   const [abierto, setAbierto] = useState(false);
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [input, setInput] = useState("");
   const [cargando, setCargando] = useState(false);
-  const [esquina, setEsquina] = useState<Esquina>("top-right");
-  const [arrastrando, setArrastrando] = useState(false);
-
-  const burbRef = useRef<HTMLDivElement>(null);
-  const offsetRef = useRef({ x: 0, y: 0 });
   const chatRef = useRef<HTMLDivElement>(null);
-  const fueArrastrado = useRef(false);
 
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [mensajes, abierto]);
-
-  const iniciarArrastre = (e: React.MouseEvent | React.TouchEvent) => {
-    fueArrastrado.current = false;
-    setArrastrando(true);
-    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
-    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-    const rect = burbRef.current?.getBoundingClientRect();
-    offsetRef.current = {
-      x: clientX - (rect?.left ?? 0),
-      y: clientY - (rect?.top ?? 0),
-    };
-    e.preventDefault();
-  };
-
-  useEffect(() => {
-    const mover = (e: MouseEvent | TouchEvent) => {
-      if (!arrastrando || !burbRef.current) return;
-      fueArrastrado.current = true;
-      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
-      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-      burbRef.current.style.left = `${clientX - offsetRef.current.x}px`;
-      burbRef.current.style.top = `${clientY - offsetRef.current.y}px`;
-      burbRef.current.style.right = "auto";
-      burbRef.current.style.bottom = "auto";
-    };
-
-    const soltar = (e: MouseEvent | TouchEvent) => {
-      if (!arrastrando) return;
-      setArrastrando(false);
-      const clientX = "changedTouches" in e
-        ? e.changedTouches[0].clientX
-        : (e as MouseEvent).clientX;
-      const clientY = "changedTouches" in e
-        ? e.changedTouches[0].clientY
-        : (e as MouseEvent).clientY;
-      const nueva = esquinaMasCercana(clientX, clientY);
-      setEsquina(nueva);
-      if (burbRef.current) {
-        burbRef.current.style.left = "";
-        burbRef.current.style.top = "";
-        burbRef.current.style.right = "";
-        burbRef.current.style.bottom = "";
-      }
-    };
-
-    window.addEventListener("mousemove", mover);
-    window.addEventListener("mouseup", soltar);
-    window.addEventListener("touchmove", mover, { passive: false });
-    window.addEventListener("touchend", soltar);
-
-    return () => {
-      window.removeEventListener("mousemove", mover);
-      window.removeEventListener("mouseup", soltar);
-      window.removeEventListener("touchmove", mover);
-      window.removeEventListener("touchend", soltar);
-    };
-  }, [arrastrando]);
 
   const enviar = async () => {
     const texto = input.trim();
@@ -180,72 +96,67 @@ ${historial}`;
   };
 
   return (
-  <div ref={burbRef} style={posicionEsquina(esquina)}>
-    {abierto && (
-      <div style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9998,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "20px",
-        pointerEvents: "none",
-      }}>
-        <div className="agenteChat" style={{ pointerEvents: "all" }}>
-          <div className="agenteChatHead">
-            <span>Asistente PagBol</span>
-            <button onClick={() => setAbierto(false)}>✕</button>
-          </div>
+    <div style={{ position: "fixed", top: 18, right: 18, zIndex: 9999 }}>
+      {abierto && (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 9998,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px",
+          pointerEvents: "none",
+        }}>
+          <div className="agenteChat" style={{ pointerEvents: "all" }}>
+            <div className="agenteChatHead">
+              <span>Asistente PagBol</span>
+              <button onClick={() => setAbierto(false)}>✕</button>
+            </div>
 
-          <div className="agenteChatMensajes" ref={chatRef}>
-            {mensajes.length === 0 && (
-              <p className="agenteHint">
-                Hola, {nombreAgente}. Estás en <b>{paginaActual}</b>.
-                ¿En qué puedo ayudarte?
-              </p>
-            )}
-            {mensajes.map((m, i) => (
-              <div
-                key={i}
-                className={m.rol === "user" ? "agenteMsgUser" : "agenteMsgBot"}
-              >
-                {m.texto}
-              </div>
-            ))}
-            {cargando && (
-              <div className="agenteMsgBot agenteCargando">Escribiendo...</div>
-            )}
-          </div>
+            <div className="agenteChatMensajes" ref={chatRef}>
+              {mensajes.length === 0 && (
+                <p className="agenteHint">
+                  Hola, {nombreAgente}. Estás en <b>{paginaActual}</b>.
+                  ¿En qué puedo ayudarte?
+                </p>
+              )}
+              {mensajes.map((m, i) => (
+                <div
+                  key={i}
+                  className={m.rol === "user" ? "agenteMsgUser" : "agenteMsgBot"}
+                >
+                  {m.texto}
+                </div>
+              ))}
+              {cargando && (
+                <div className="agenteMsgBot agenteCargando">Escribiendo...</div>
+              )}
+            </div>
 
-          <div className="agenteChatInput">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Escribe tu pregunta..."
-              onKeyDown={(e) => {
-                if (e.key === "Enter") void enviar();
-              }}
-            />
-            <button onClick={() => void enviar()} disabled={cargando}>
-              ➤
-            </button>
+            <div className="agenteChatInput">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Escribe tu pregunta..."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") void enviar();
+                }}
+              />
+              <button onClick={() => void enviar()} disabled={cargando}>
+                ➤
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
 
-    <div
-      className="agenteBurbuja"
-      style={{ position: "relative", zIndex: 9999 }}
-      onMouseDown={iniciarArrastre}
-      onTouchStart={iniciarArrastre}
-      onClick={() => {
-        if (!fueArrastrado.current) setAbierto((p) => !p);
-      }}
-    >
+      <div
+        className="agenteBurbuja"
+        onClick={() => setAbierto((p) => !p)}
+      >
         <img src={agenteImg} alt="Asistente" />
-        </div>
+      </div>
     </div>
-    );
+  );
 };
