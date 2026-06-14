@@ -11,8 +11,11 @@ export const RegistroAgente = ({ volver }: Props) => {
   const [nroEsclf, setNroEsclf] = useState("");
   const [CI, setCI] = useState("");
   const [grado, setGrado] = useState("");
+<<<<<<< HEAD
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
+=======
+>>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
   const [password, setPassword] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -21,11 +24,23 @@ export const RegistroAgente = ({ volver }: Props) => {
   const fortalezaPassword = () => {
     if (!password) return "Vacía";
     if (password.length < 6) return "Débil";
+<<<<<<< HEAD
     const tieneNumero = /\d/.test(password);
     const tieneMayuscula = /[A-Z]/.test(password);
     const tieneEspecial = /[^A-Za-z0-9]/.test(password);
     if (password.length >= 8 && tieneNumero && tieneMayuscula && tieneEspecial)
       return "Fuerte";
+=======
+
+    const tieneNumero = /\d/.test(password);
+    const tieneMayuscula = /[A-Z]/.test(password);
+    const tieneEspecial = /[^A-Za-z0-9]/.test(password);
+
+    if (password.length >= 8 && tieneNumero && tieneMayuscula && tieneEspecial) {
+      return "Fuerte";
+    }
+
+>>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
     return "Media";
   };
 
@@ -34,6 +49,7 @@ export const RegistroAgente = ({ volver }: Props) => {
       setError("");
       setMensaje("");
 
+<<<<<<< HEAD
       if (!nroEsclf.trim()) { setError("Ingrese el número de escalafón."); return; }
       if (!CI.trim()) { setError("Ingrese el CI."); return; }
       if (!grado.trim()) { setError("Ingrese el grado."); return; }
@@ -43,6 +59,9 @@ export const RegistroAgente = ({ volver }: Props) => {
       if (!captchaToken) { setError("Debe completar el CAPTCHA."); return; }
 
       await registrarAgente(nroEsclf, CI, grado, nombres, apellidos, password, captchaToken);
+=======
+      await registrarAgente(nroEsclf, CI, grado, password, captchaToken);
+>>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
 
       setMensaje("Agente registrado correctamente.");
     } catch (err) {
@@ -60,16 +79,25 @@ export const RegistroAgente = ({ volver }: Props) => {
           value={nroEsclf}
           onChange={(e) => setNroEsclf(e.target.value.toUpperCase())}
         />
+<<<<<<< HEAD
+=======
+
+>>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
         <input
           placeholder="CI"
           value={CI}
           onChange={(e) => setCI(e.target.value)}
         />
+<<<<<<< HEAD
+=======
+
+>>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
         <input
           placeholder="Grado"
           value={grado}
           onChange={(e) => setGrado(e.target.value)}
         />
+<<<<<<< HEAD
         <input
           placeholder="Nombres"
           value={nombres}
@@ -80,6 +108,9 @@ export const RegistroAgente = ({ volver }: Props) => {
           value={apellidos}
           onChange={(e) => setApellidos(e.target.value)}
         />
+=======
+
+>>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
         <input
           type="password"
           placeholder="Contraseña"
@@ -92,7 +123,10 @@ export const RegistroAgente = ({ volver }: Props) => {
         <Turnstile
           sitekey="0x4AAAAAADiiKmol3OT7EeRm"
           onVerify={(token) => setCaptchaToken(token)}
+<<<<<<< HEAD
           onExpire={() => setCaptchaToken("")}
+=======
+>>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
         />
 
         {mensaje && <p className="mensaje-exito">{mensaje}</p>}
