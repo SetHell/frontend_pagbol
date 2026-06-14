@@ -7,12 +7,16 @@ import { logoutAgente } from "./services/api";
 
 export default function App() {
   const [agente, setAgente] = useState<Agente | null>(() => {
-    const sesion = sessionStorage.getItem("agente");
-    const token = sessionStorage.getItem("token");
-
-    if (!sesion || !token) return null;
-
-    return JSON.parse(sesion) as Agente;
+    try {
+      const sesion = sessionStorage.getItem("agente");
+      const token = sessionStorage.getItem("token");
+      if (!sesion || !token) return null;
+      return JSON.parse(sesion) as Agente;
+    } catch {
+      sessionStorage.removeItem("agente");
+      sessionStorage.removeItem("token");
+      return null;
+    }
   });
 
   const iniciarSesion = (ag: Agente, token: string) => {
