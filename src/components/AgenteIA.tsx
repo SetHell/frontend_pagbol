@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import type React from "react";
 import agenteImg from "../assets/agenteIA.png";
 import { generarContexto } from "./ia/contextoIA";
 
