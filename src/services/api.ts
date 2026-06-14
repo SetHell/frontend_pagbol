@@ -58,52 +58,17 @@ const peticion = async <T>(
   return res.json() as Promise<T>;
 };
 
-<<<<<<< HEAD
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
-=======
->>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
 export const loginAgente = (
   nro_esclf: string,
   password: string,
   captchaToken: string
-<<<<<<< HEAD
 ) =>
   peticion<LoginResponse>("/auth/login", {
     method: "POST",
     headers: jsonHeaders(),
     body: JSON.stringify({ nro_esclf, password, captchaToken }),
-=======
-) => {
-  return peticion<LoginResponse>("/auth/login", {
-    method: "POST",
-    headers: jsonHeaders(),
-    body: JSON.stringify({
-      nro_esclf,
-      password,
-      captchaToken,
-    }),
-  });
-};
-
-export const registrarAgente = (
-  nro_esclf: string,
-  CI: string,
-  grado: string,
-  password: string,
-  captchaToken: string
-) => {
-  return peticion("/auth/register", {
-    method: "POST",
-    headers: jsonHeaders(),
-    body: JSON.stringify({
-      nro_esclf,
-      CI,
-      grado,
-      password,
-      captchaToken,
-    }),
->>>>>>> caa78ca919834215c6a9571d8e25f116ab982bee
   });
 
 export const registrarAgente = (
