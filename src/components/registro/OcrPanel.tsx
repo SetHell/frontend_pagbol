@@ -15,6 +15,11 @@ export const OcrPanel = ({
   cambiarActivo,
   enviarArchivo,
 }: Props) => {
+  const manejarArchivo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) enviarArchivo(f);
+  };
+
   return (
     <div className="ocrBox">
       <button type="button" className="btnOCR" onClick={cambiarActivo}>
@@ -24,24 +29,37 @@ export const OcrPanel = ({
       {activo && (
         <div className="ocrPanel">
           <p>
-            Sube una imagen de la boleta. El OCR intentará llenar el formulario,
-            pero podrás corregir los datos antes de registrar.
+            Sube una imagen o toma una foto de la boleta. El OCR intentará
+            llenar el formulario, pero podrás corregir los datos antes de
+            registrar.
           </p>
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) enviarArchivo(f);
-            }}
-          />
+          <div className="ocrInputs">
+            <label className="ocrInputLabel">
+              Subir imagen
+              <input
+                type="file"
+                accept="image/*"
+                onChange={manejarArchivo}
+              />
+            </label>
+
+            <label className="ocrInputLabel">
+              Tomar foto
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={manejarArchivo}
+              />
+            </label>
+          </div>
 
           {mensaje && <strong>{mensaje}</strong>}
 
           {camposRevisar.length > 0 && (
             <div className="ocrAviso">
-              <p>Campos recomendados para revisar:</p>
+              <p>Campos a revisar:</p>
               <ul>
                 {camposRevisar.map((c) => (
                   <li key={c}>{c}</li>

@@ -293,3 +293,35 @@
   cursor: not-allowed;
   background: #e6e0bc;
 }
+.ocrInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ocrInputLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--papel-amarillo);
+  border: 2px solid var(--borde-papel);
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 900;
+  color: var(--verde-oscuro);
+  cursor: pointer;
+  text-align: center;
+}
+
+.ocrInputLabel input {
+  font-size: 13px;
+  background: white;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .ocrInputs {
+    grid-template-columns: 1fr;
+  }
+}
