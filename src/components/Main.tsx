@@ -9,15 +9,16 @@ import { Historial } from "./Historial";
 type Props = {
   agente: Agente;
   cerrarSesion: () => void;
+  onCambiarPagina: (pagina: string) => void;
 };
 
 type Pagina = "inicio" | "guia" | "registrar" | "historial";
 
-export const Main = ({ agente, cerrarSesion }: Props) => {
+export const Main = ({ agente, cerrarSesion, onCambiarPagina }: Props) => {
   const [pag, setPag] = useState<Pagina>("inicio");
   const [bol, setBol] = useState<BoletaReg[]>([]);
   const [editando, setEditando] = useState<BoletaReg | null>(null);
-
+  
   const confirmarSalida = () => {
     if (window.confirm("¿Está seguro que desea cerrar sesión?")) cerrarSesion();
   };
@@ -26,6 +27,7 @@ export const Main = ({ agente, cerrarSesion }: Props) => {
     const pagina = nuevaPag as Pagina;
     if (pagina !== "registrar") setEditando(null);
     setPag(pagina);
+    onCambiarPagina(nuevaPag.toUpperCase());
   };
 
   const irEditar = (boleta: BoletaReg) => {

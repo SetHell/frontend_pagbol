@@ -4,8 +4,10 @@ import { PrincipalLogin } from "./components/PrincipalLogin";
 import { Main } from "./components/Main";
 import "./components/css/sistema.css";
 import { logoutAgente } from "./services/api";
+import { AgenteIA } from "./components/AgenteIA";
 
 export default function App() {
+  const [paginaActual, setPaginaActual] = useState("INICIO");
   const [agente, setAgente] = useState<Agente | null>(() => {
     try {
       const sesion = sessionStorage.getItem("agente");
@@ -30,7 +32,7 @@ export default function App() {
       if (agente) {
         await logoutAgente();
       }
-    } catch { /* limpiar */ }
+    } catch { /* empty */ }
     sessionStorage.removeItem("agente");
     sessionStorage.removeItem("token");
     setAgente(null);
@@ -40,5 +42,18 @@ export default function App() {
     return <PrincipalLogin onLogin={iniciarSesion} />;
   }
 
-  return <Main agente={agente} cerrarSesion={cerrarSesion} />;
+  return (
+    <>
+      <Main
+        agente={agente}
+        cerrarSesion={cerrarSesion}
+        onCambiarPagina={setPaginaActual}
+      />
+      <AgenteIA
+        paginaActual={paginaActual}
+        nombreAgente={`${agente.persona.nombres} ${agente.persona.apellidos}`}
+        grado={agente.grado}
+      />
+    </>
+  );
 }
