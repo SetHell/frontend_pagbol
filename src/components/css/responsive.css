@@ -27,7 +27,7 @@
 
   .contenido {
     flex: 1;
-    padding: 16px;
+    padding: 12px;
     min-height: auto;
   }
 
@@ -51,5 +51,89 @@
 
   .salirMovil button:hover {
     background: #6f1c16;
+  }
+
+  .panel {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .panel h1 {
+    font-size: 20px;
+  }
+
+  /* ── Tabla historial: scroll horizontal ── */
+  .tablaWrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+    border: 2px solid var(--borde-papel);
+  }
+
+  .tablaWrapper table {
+    min-width: 700px;
+    border: none;
+    border-radius: 0;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  td button {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  .filtrosTabla {
+    grid-template-columns: 1fr;
+  }
+
+  .gridForm {
+    grid-template-columns: 1fr;
+  }
+
+  .gridForm label {
+    margin-top: 8px;
+    margin-bottom: 2px;
+  }
+
+  .contadorCampo {
+    grid-column: 1 / -1;
+  }
+
+  .avisoVehiculo {
+    grid-column: 1 / -1;
+  }
+
+  .boletaFisica {
+    padding: 16px;
+  }
+
+  .boletaHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .boletaHead h2 {
+    font-size: 20px;
+  }
+
+  .modalCard {
+    width: 96vw;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 400px) {
+  .menuOpciones {
+    grid-template-columns: 1fr;
+  }
+
+  .boletaHead h2 {
+    font-size: 17px;
   }
 }
