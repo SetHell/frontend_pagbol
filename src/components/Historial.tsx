@@ -20,6 +20,7 @@ import { generarReporteBoletasPdf } from "./historial/reportePDF";
 import { FiltrosHist } from "./historial/FiltrosHist";
 import { TablaBol } from "./historial/TablaBol";
 import { ModalBol } from "./historial/ModalBol";
+import { GraficoBoletas } from "./historial/GraficoBoletas";
 
 type Props = {
   agente: Agente;
@@ -33,6 +34,7 @@ export const Historial = ({ agente, bol, setBol, editarBoleta }: Props) => {
   const [cargando, setCargando] = useState(true);
   const [err, setErr] = useState("");
   const [recarga, setRecarga] = useState(0);
+  const [verGrafico, setVerGrafico] = useState(false);
 
   const [filtros, setFiltros] = useState<FiltrosHistorial>({
     placa: "",
@@ -143,6 +145,7 @@ export const Historial = ({ agente, bol, setBol, editarBoleta }: Props) => {
         cargar={cargar}
         generarPDF={generarPDF}
         desactivarPDF={filtradas.length === 0}
+        mostrarGrafico={() => setVerGrafico(true)}
       />
 
       {err && (
@@ -173,6 +176,13 @@ export const Historial = ({ agente, bol, setBol, editarBoleta }: Props) => {
       )}
 
       {sel && <ModalBol boleta={sel} cerrar={() => setSel(null)} />}
+      
+      {verGrafico && (
+        <GraficoBoletas
+          boletas={activas}
+          onCerrar={() => setVerGrafico(false)}
+        />
+      )}
     </section>
   );
 };

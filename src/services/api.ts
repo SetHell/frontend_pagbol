@@ -156,3 +156,10 @@ export const procesarOCR = async (file: File): Promise<DatosOcr> => {
 
   return datos;
 };
+
+// ─── Logout ─────────────────────────────────────────────────────────────────
+export const logoutAgente = () =>
+  peticion<{ mensaje: string }>("/auth/logout", {
+    method: "POST",
+    headers: jsonHeaders(),
+  });

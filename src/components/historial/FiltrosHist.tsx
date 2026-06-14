@@ -18,6 +18,7 @@ type Props = {
   cargar: () => void;
   generarPDF: () => void;
   desactivarPDF: boolean;
+  mostrarGrafico: () => void;
 };
 
 export const FiltrosHist = ({
@@ -33,6 +34,7 @@ export const FiltrosHist = ({
   cargar,
   generarPDF,
   desactivarPDF,
+  mostrarGrafico,
 }: Props) => {
   return (
     <div className="filtrosTabla">
@@ -121,6 +123,10 @@ export const FiltrosHist = ({
 
       <button onClick={generarPDF} disabled={desactivarPDF}>
         Generar PDF
+      </button>
+      
+      <button onClick={mostrarGrafico}>
+        Ver Estadísticas
       </button>
     </div>
   );

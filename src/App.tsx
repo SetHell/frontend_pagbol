@@ -3,6 +3,7 @@ import type { Agente } from "./components/types";
 import { PrincipalLogin } from "./components/PrincipalLogin";
 import { Main } from "./components/Main";
 import "./components/css/sistema.css";
+import { logoutAgente } from "./services/api";
 
 export default function App() {
   const [agente, setAgente] = useState<Agente | null>(() => {
@@ -20,7 +21,12 @@ export default function App() {
     setAgente(ag);
   };
 
-  const cerrarSesion = () => {
+  const cerrarSesion = async () => {
+    try {
+      if (agente) {
+        await logoutAgente();
+      }
+    } catch { /* limpiar */ }
     sessionStorage.removeItem("agente");
     sessionStorage.removeItem("token");
     setAgente(null);
