@@ -14,12 +14,8 @@ const obtenerToken = () => sessionStorage.getItem("token");
 
 const authHeaders = (): Record<string, string> => {
   const token = obtenerToken();
-
   if (!token) return {};
-
-  return {
-    Authorization: `Bearer ${token}`,
-  };
+  return { Authorization: `Bearer ${token}` };
 };
 
 const jsonHeaders = (): Record<string, string> => ({
@@ -27,18 +23,14 @@ const jsonHeaders = (): Record<string, string> => ({
   ...authHeaders(),
 });
 
-const obtenerMensajeError = async (res: Response) => {
+const obtenerMensajeError = async (res: Response): Promise<string> => {
   const texto = await res.text();
-
   if (!texto) return "Error de conexión con el servidor";
-
   try {
     const json = JSON.parse(texto);
-
     if (Array.isArray(json.message)) return json.message.join(", ");
     if (typeof json.message === "string") return json.message;
     if (typeof json.error === "string") return json.error;
-
     return texto;
   } catch {
     return texto;
@@ -63,58 +55,85 @@ const peticion = async <T>(
     throw new Error(await obtenerMensajeError(res));
   }
 
-  return res.json();
+  return res.json() as Promise<T>;
 };
 
-export const loginAgente = (nro_esclf: string, password: string) => {
-  return peticion<LoginResponse>("/auth/login", {
+// ─── Auth ────────────────────────────────────────────────────────────────────
+
+export const loginAgente = (
+  nro_esclf: string,
+  password: string,
+  captchaToken: string
+) =>
+  peticion<LoginResponse>("/auth/login", {
     method: "POST",
     headers: jsonHeaders(),
-    body: JSON.stringify({ nro_esclf, password }),
+    body: JSON.stringify({ nro_esclf, password, captchaToken }),
   });
-};
 
-export const buscarAgente = (nro_esclf: string) => {
-  return peticion<Agente>(`/agentes/${encodeURIComponent(nro_esclf)}`);
-};
+export const registrarAgente = (
+  nro_esclf: string,
+  CI: string,
+  grado: string,
+  nombres: string,
+  apellidos: string,
+  password: string,
+  captchaToken: string
+) =>
+  peticion<{ mensaje: string }>("/auth/register", {
+    method: "POST",
+    headers: jsonHeaders(),
+    body: JSON.stringify({
+      nro_esclf,
+      CI,
+      grado,
+      nombres,
+      apellidos,
+      password,
+      captchaToken,
+    }),
+  });
 
-export const buscarVehiculo = (placa: string) => {
-  return peticion<Vehiculo>(`/vehiculos/${encodeURIComponent(placa)}`);
-};
+// ─── Agentes ─────────────────────────────────────────────────────────────────
 
-export const listarBoletas = () => {
-  return peticion<BoletaReg[]>("/boletas");
-};
+export const buscarAgente = (nro_esclf: string) =>
+  peticion<Agente>(`/agentes/${encodeURIComponent(nro_esclf)}`);
 
-export const crearBoleta = (data: Partial<BoletaReg>) => {
-  return peticion<BoletaReg>("/boletas", {
+// ─── Vehículos ───────────────────────────────────────────────────────────────
+
+export const buscarVehiculo = (placa: string) =>
+  peticion<Vehiculo>(`/vehiculos/${encodeURIComponent(placa)}`);
+
+// ─── Boletas ─────────────────────────────────────────────────────────────────
+
+export const listarBoletas = () => peticion<BoletaReg[]>("/boletas");
+
+export const crearBoleta = (data: Partial<BoletaReg>) =>
+  peticion<BoletaReg>("/boletas", {
     method: "POST",
     headers: jsonHeaders(),
     body: JSON.stringify(data),
   });
-};
 
 export const actualizarBoleta = (
   nro_boleta: string,
   data: Partial<BoletaReg>
-) => {
-  return peticion<BoletaReg>(`/boletas/${encodeURIComponent(nro_boleta)}`, {
+) =>
+  peticion<BoletaReg>(`/boletas/${encodeURIComponent(nro_boleta)}`, {
     method: "PATCH",
     headers: jsonHeaders(),
     body: JSON.stringify(data),
   });
-};
 
-export const eliminarBoleta = (nro_boleta: string) => {
-  return peticion<BoletaReg>(`/boletas/${encodeURIComponent(nro_boleta)}`, {
+export const eliminarBoleta = (nro_boleta: string) =>
+  peticion<BoletaReg>(`/boletas/${encodeURIComponent(nro_boleta)}`, {
     method: "DELETE",
   });
-};
+
+// ─── OCR ─────────────────────────────────────────────────────────────────────
 
 type RespuestaOcrBackend = {
-  resultado?: {
-    datos_sugeridos?: DatosOcr;
-  };
+  resultado?: { datos_sugeridos?: DatosOcr };
   datos_sugeridos?: DatosOcr;
 };
 
@@ -128,17 +147,12 @@ export const procesarOCR = async (file: File): Promise<DatosOcr> => {
     body: formData,
   });
 
-  if (!res.ok) {
-    throw new Error(await obtenerMensajeError(res));
-  }
+  if (!res.ok) throw new Error(await obtenerMensajeError(res));
 
   const data = (await res.json()) as RespuestaOcrBackend;
+  const datos = data.resultado?.datos_sugeridos ?? data.datos_sugeridos;
 
-  const datos = data.resultado?.datos_sugeridos || data.datos_sugeridos;
-
-  if (!datos) {
-    throw new Error("El OCR respondió, pero no devolvió datos_sugeridos");
-  }
+  if (!datos) throw new Error("El OCR respondió, pero no devolvió datos_sugeridos");
 
   return datos;
 };
